@@ -12,6 +12,7 @@ export default defineConfig({
     port: Number(process.env.PORT) || 3000,
     strictPort: true,
     allowedHosts: [
+      'autoreplychat.com',
       'autaichat-production.up.railway.app',
       '.railway.app'
     ]
