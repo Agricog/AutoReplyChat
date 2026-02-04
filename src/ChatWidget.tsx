@@ -7,6 +7,8 @@ interface Message {
   content: string;
 }
 
+const API_URL = 'https://autaichat-api-production.up.railway.app/api';
+
 export default function ChatWidget() {
   const { t } = useTranslation();
   
@@ -16,31 +18,83 @@ export default function ChatWidget() {
   const [leadCaptured, setLeadCaptured] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [leadInfo, setLeadInfo] = useState({ name: '', email: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      // Call the API
+      const response = await fetch(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: input,
+          customerId: 'default',
+          conversationHistory: messages.map(m => ({
+            role: m.role === 'system' ? 'assistant' : m.role,
+            content: m.content
+          }))
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      const data = await response.json();
+      
       const botMessage: Message = { 
         role: 'assistant', 
-        content: 'Based on our BS 7671 compliance documentation, cable sizing depends on load current, ambient temperature, and installation method. For a 32A circuit in conduit at 30°C, you\'d typically use 6mm² cable.' 
+        content: data.message
       };
       setMessages(prev => [...prev, botMessage]);
       
+      // Show lead form after first exchange
       if (messages.length === 0 && !leadCaptured) {
         setTimeout(() => setShowLeadForm(true), 1000);
       }
-    }, 800);
+    } catch (error) {
+      console.error('Error calling API:', error);
+      const errorMessage: Message = {
+        role: 'assistant',
+        content: t('errorMessage')
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
+  const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLeadCaptured(true);
     setShowLeadForm(false);
+    
+    // Send lead to API
+    try {
+      await fetch(`${API_URL}/lead`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: leadInfo.name,
+          email: leadInfo.email,
+          customerId: 'default',
+          conversation: messages
+        }),
+      });
+    } catch (error) {
+      console.error('Error capturing lead:', error);
+    }
     
     setMessages(prev => [...prev, {
       role: 'system',
@@ -104,6 +158,18 @@ export default function ChatWidget() {
             </div>
           </div>
         ))}
+
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-white text-gray-800 border border-gray-200 rounded-lg px-4 py-2">
+              <div className="flex space-x-2">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {showLeadForm && !leadCaptured && (
@@ -156,14 +222,16 @@ export default function ChatWidget() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSend()}
             placeholder={t('placeholder')}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isLoading}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
             aria-label={t('placeholder')}
           />
           <button
             onClick={handleSend}
-            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors"
+            disabled={isLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             aria-label={t('sendButton')}
           >
             <Send size={20} />
