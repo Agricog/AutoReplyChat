@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Send, X, MessageCircle } from 'lucide-react';
 import { useTranslation } from './useTranslation';
 
@@ -19,6 +19,16 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(true);
   const [leadInfo, setLeadInfo] = useState({ name: '', email: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [customerId, setCustomerId] = useState<string>('1');
+
+  // Get customer ID from URL parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const customerParam = params.get('customer');
+    if (customerParam) {
+      setCustomerId(customerParam);
+    }
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -29,7 +39,6 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     try {
-      // Call the API
       const response = await fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: {
@@ -37,7 +46,7 @@ export default function ChatWidget() {
         },
         body: JSON.stringify({
           message: input,
-          customerId: 'default',
+          customerId: customerId,
           conversationHistory: messages.map(m => ({
             role: m.role === 'system' ? 'assistant' : m.role,
             content: m.content
@@ -57,7 +66,6 @@ export default function ChatWidget() {
       };
       setMessages(prev => [...prev, botMessage]);
       
-      // Show lead form after first exchange
       if (messages.length === 0 && !leadCaptured) {
         setTimeout(() => setShowLeadForm(true), 1000);
       }
@@ -78,7 +86,6 @@ export default function ChatWidget() {
     setLeadCaptured(true);
     setShowLeadForm(false);
     
-    // Send lead to API
     try {
       await fetch(`${API_URL}/lead`, {
         method: 'POST',
@@ -88,7 +95,7 @@ export default function ChatWidget() {
         body: JSON.stringify({
           name: leadInfo.name,
           email: leadInfo.email,
-          customerId: 'default',
+          customerId: customerId,
           conversation: messages
         }),
       });
