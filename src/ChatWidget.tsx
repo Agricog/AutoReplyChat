@@ -1,12 +1,16 @@
-// ChatWidget.tsx - Multilingual widget with auto-detected language
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Send, X, MessageCircle } from 'lucide-react';
 import { useTranslation } from './useTranslation';
 
+interface Message {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
 export default function ChatWidget() {
-  const { t, language } = useTranslation(); // Auto-detects browser language
+  const { t } = useTranslation();
   
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
@@ -16,36 +20,28 @@ export default function ChatWidget() {
   const handleSend = () => {
     if (!input.trim()) return;
 
-    // Add user message
-    const userMessage = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    // TODO: Call your Railway API endpoint here
-    // For now, simulating bot response
     setTimeout(() => {
-      const botMessage = { 
+      const botMessage: Message = { 
         role: 'assistant', 
         content: 'Based on our BS 7671 compliance documentation, cable sizing depends on load current, ambient temperature, and installation method. For a 32A circuit in conduit at 30°C, you\'d typically use 6mm² cable.' 
       };
       setMessages(prev => [...prev, botMessage]);
       
-      // Show lead form after first exchange (if not already captured)
       if (messages.length === 0 && !leadCaptured) {
         setTimeout(() => setShowLeadForm(true), 1000);
       }
     }, 800);
   };
 
-  const handleLeadSubmit = (e) => {
+  const handleLeadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLeadCaptured(true);
     setShowLeadForm(false);
     
-    // TODO: Send lead data to your backend
-    // Backend will email business owner: conversation + lead details
-    
-    // Add confirmation message (using translation with interpolation)
     setMessages(prev => [...prev, {
       role: 'system',
       content: t('thankYouMessage', { name: leadInfo.name, email: leadInfo.email })
@@ -68,7 +64,6 @@ export default function ChatWidget() {
 
   return (
     <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200">
-      {/* Header */}
       <div className="bg-blue-600 text-white p-4 flex items-center justify-between">
         <div>
           <h3 className="font-semibold">{t('headerTitle')}</h3>
@@ -83,7 +78,6 @@ export default function ChatWidget() {
         </button>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
@@ -112,7 +106,6 @@ export default function ChatWidget() {
         ))}
       </div>
 
-      {/* Lead Capture Form (appears after first exchange) */}
       {showLeadForm && !leadCaptured && (
         <div className="bg-blue-50 border-t border-blue-200 p-4 space-y-3">
           <div className="flex items-start justify-between">
@@ -157,7 +150,6 @@ export default function ChatWidget() {
         </div>
       )}
 
-      {/* Input */}
       <div className="p-4 border-t border-gray-200 bg-white">
         <div className="flex gap-2">
           <input
