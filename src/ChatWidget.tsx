@@ -7,28 +7,22 @@ interface Message {
   content: string;
 }
 
+interface ChatWidgetProps {
+  customerId: string;
+}
+
 const API_URL = 'https://api.autoreplychat.com/api';
 
-export default function ChatWidget() {
+export default function ChatWidget({ customerId }: ChatWidgetProps) {
   const { t } = useTranslation();
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [leadInfo, setLeadInfo] = useState({ name: '', email: '' });
   const [isLoading, setIsLoading] = useState(false);
-  const [customerId, setCustomerId] = useState<string>('1');
-
-  // Get customer ID from URL parameter
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const customerParam = params.get('customer');
-    if (customerParam) {
-      setCustomerId(customerParam);
-    }
-  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -62,7 +56,7 @@ export default function ChatWidget() {
       
       const botMessage: Message = { 
         role: 'assistant', 
-        content: data.message
+        content: data.message || data.response
       };
       setMessages(prev => [...prev, botMessage]);
       
@@ -87,16 +81,18 @@ export default function ChatWidget() {
     setShowLeadForm(false);
     
     try {
-      await fetch(`${API_URL}/lead`, {
+      await fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: leadInfo.name,
-          email: leadInfo.email,
+          message: 'Lead capture',
           customerId: customerId,
-          conversation: messages
+          lead: {
+            name: leadInfo.name,
+            email: leadInfo.email
+          }
         }),
       });
     } catch (error) {
@@ -111,7 +107,7 @@ export default function ChatWidget() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6">
+      <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all"
@@ -124,7 +120,7 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+    <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200 z-50">
       <div className="bg-blue-600 text-white p-4 flex items-center justify-between">
         <div>
           <h3 className="font-semibold">{t('headerTitle')}</h3>
