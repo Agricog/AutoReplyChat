@@ -3,6 +3,8 @@ import ChatWidget from './ChatWidget'
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get('customer') || '1';
+  
+  const greetingMessage = "Thank you for visiting! How may we assist you today?";
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
@@ -20,11 +22,15 @@ function App() {
             <li>✓ Lead capture form after first exchange</li>
             <li>✓ Claude-powered responses</li>
             <li>✓ Email notifications to business owner</li>
+            <li>✓ Customizable greeting bubble</li>
           </ul>
         </div>
       </div>
       
-      <ChatWidget customerId={customerId} />
+      <ChatWidget 
+        customerId={customerId}
+        greetingMessage={greetingMessage}
+      />
     </div>
   )
 }
