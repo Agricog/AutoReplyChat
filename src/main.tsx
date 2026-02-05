@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import App from './App'
 import ChatWidget from './ChatWidget'
 import './index.css'
 
@@ -21,15 +22,12 @@ window.initAutoReplyChat = function(customerId: string) {
   }
 };
 
-// For local development - check URL parameter
-const urlParams = new URLSearchParams(window.location.search);
-const devCustomerId = urlParams.get('customer') || '1';
-
-// Render directly if in development mode
-if (import.meta.env.DEV) {
-  ReactDOM.createRoot(document.getElementById('root')!).render(
+// For local development - render App component
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <ChatWidget customerId={devCustomerId} />
+      <App />
     </React.StrictMode>
   );
 }
