@@ -6,17 +6,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Landing page at root */}
         <Route path="/" element={<LandingPage />} />
-        
-        {/* Demo page at /demo */}
         <Route path="/demo" element={<DemoPage />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-// Your existing demo page as a component
 function DemoPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get('customer') || '1';
