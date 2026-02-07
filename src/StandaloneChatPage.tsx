@@ -20,6 +20,7 @@ interface BotSettings {
   userMessageBg: string;
   botMessageBg: string;
   sendButtonBg: string;
+  leadFormMessage: string;
 }
 
 function StandaloneChatPage() {
@@ -103,6 +104,7 @@ function StandaloneChatPage() {
           userMessageBg={settings?.userMessageBg}
           botMessageBg={settings?.botMessageBg}
           sendButtonBg={settings?.sendButtonBg}
+          leadFormMessage={settings?.leadFormMessage}
         />
       </div>
     </div>
