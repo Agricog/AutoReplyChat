@@ -51,12 +51,15 @@
     // Create iframe container (hidden initially)
     var iframeContainer = document.createElement('div');
     iframeContainer.id = 'autoreply-chat-iframe-container';
-    iframeContainer.style.cssText = 'display: none; width: 380px; height: 550px; margin-bottom: 16px;';
+    var isMobile = window.innerWidth <= 500;
+    iframeContainer.style.cssText = isMobile
+    ? 'display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10000; margin: 0;'
+    : 'display: none; width: 380px; height: 550px; margin-bottom: 16px;';
     
     // Create iframe
     var iframe = document.createElement('iframe');
     iframe.src = 'https://autoreplychat.com/chat/' + botId;
-    iframe.style.cssText = 'width: 100%; height: 100%; border: none; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.15);';
+    iframe.style.cssText = 'width: 100%; height: 100%; border: none; border-radius: ' + (isMobile ? '0' : '12px') + '; box-shadow: 0 4px 24px rgba(0,0,0,0.15);';
     iframe.allow = 'microphone';
     
     iframeContainer.appendChild(iframe);
