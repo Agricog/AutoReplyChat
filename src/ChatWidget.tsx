@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send, X, MessageCircle } from 'lucide-react';
 import { useTranslation } from './useTranslation';
 
@@ -28,6 +28,11 @@ export default function ChatWidget({
   const [leadInfo, setLeadInfo] = useState({ name: '', email: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [showGreeting, setShowGreeting] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [messages, isLoading]);
 
   // Auto-hide greeting after 10 seconds
   useEffect(() => {
@@ -216,6 +221,8 @@ export default function ChatWidget({
             </div>
           </div>
         )}
+
+        <div ref={messagesEndRef} />
       </div>
 
       {showLeadForm && !leadCaptured && (
