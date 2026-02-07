@@ -1,10 +1,4 @@
-import { useEffect } from 'react';
-
-export default function Privacy() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <style>{`
@@ -13,7 +7,6 @@ export default function Privacy() {
         .font-display { font-family: 'Crimson Pro', serif; }
       `}</style>
 
-      {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <a href="/" className="font-display text-2xl font-bold">
@@ -21,83 +14,70 @@ export default function Privacy() {
             <span className="text-slate-100">ReplyChat</span>
           </a>
           <a 
-            href="/" 
-            className="text-slate-300 hover:text-amber-500 transition-colors text-sm font-medium"
+            href="https://api.autoreplychat.com/login" 
+            className="px-5 py-2 bg-amber-500 text-slate-950 rounded-lg font-medium hover:bg-amber-400 transition-all text-sm"
           >
-            ← Back to Home
+            Get Started
           </a>
         </div>
       </nav>
 
-      {/* Content */}
       <div className="max-w-3xl mx-auto px-6 pt-32 pb-20">
         <h1 className="font-display text-5xl font-bold mb-4">Privacy Policy</h1>
-        <p className="text-slate-400 mb-12">Last updated: 7 February 2026</p>
+        <p className="text-slate-400 mb-12">Last updated: February 2026</p>
 
         <div className="space-y-8 text-slate-300 leading-relaxed">
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">1. Introduction</h2>
-            <p>AutoReplyChat ("we", "our", "us") is operated by Autaimate. We are committed to protecting the privacy of our customers and their end users. This policy explains how we collect, use, and safeguard your information when you use our platform.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">1. Introduction</h2>
+            <p>AutoReplyChat ("we", "our", "us") is operated by Autaimate. We are committed to protecting the privacy of our customers and their end users. This policy explains how we collect, use, and safeguard your data.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">2. Information We Collect</h2>
-            <p className="mb-3">We collect the following types of information:</p>
-            <p className="mb-2"><strong className="text-slate-100">Account Information:</strong> When you sign up, we collect your name, email address, and business email address. Your password is securely hashed and never stored in plain text.</p>
-            <p className="mb-2"><strong className="text-slate-100">Content You Upload:</strong> Documents, website URLs, and other training materials you provide to train your chatbot. This content is processed and stored as vector embeddings to power AI responses.</p>
-            <p className="mb-2"><strong className="text-slate-100">Chat Data:</strong> Conversations between your website visitors and your chatbot, including any lead information (name, email, phone) voluntarily provided by visitors through the lead capture form.</p>
-            <p><strong className="text-slate-100">Usage Data:</strong> Basic analytics such as login times, number of conversations, and feature usage to help us improve the service.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">2. Information We Collect</h2>
+            <p className="mb-3">We collect the following information:</p>
+            <p><strong className="text-slate-100">Account Information:</strong> Name, email address, and business email provided during signup.</p>
+            <p className="mt-2"><strong className="text-slate-100">Content Data:</strong> Documents, URLs, and other training materials you upload to train your chatbot.</p>
+            <p className="mt-2"><strong className="text-slate-100">Chat Data:</strong> Conversations between your chatbot and your website visitors, including any lead information (name, email, phone) voluntarily provided by visitors.</p>
+            <p className="mt-2"><strong className="text-slate-100">Usage Data:</strong> Login activity, feature usage, and session information to maintain and improve our service.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">3. How We Use Your Information</h2>
-            <p className="mb-2">We use collected information to provide and maintain the AutoReplyChat service, including generating AI-powered responses from your training content, delivering lead notifications to your specified email addresses, and improving our platform.</p>
-            <p>We do not sell, rent, or share your personal information or your training content with third parties for marketing purposes.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">3. How We Use Your Information</h2>
+            <p>We use your information to provide and maintain the AutoReplyChat service, including powering AI-generated responses from your uploaded content, delivering lead capture notifications, and improving service reliability and performance. We do not sell your data to third parties.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">4. Third-Party Services</h2>
-            <p className="mb-2">We use the following third-party services to operate the platform:</p>
-            <p className="mb-2"><strong className="text-slate-100">Anthropic (Claude AI):</strong> Chat messages and relevant training content are sent to Anthropic's API to generate responses. Anthropic's privacy policy applies to this processing.</p>
-            <p className="mb-2"><strong className="text-slate-100">Railway:</strong> Our infrastructure is hosted on Railway's cloud platform.</p>
-            <p><strong className="text-slate-100">Resend:</strong> Used to deliver lead notification emails to your business email address.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">4. Data Storage & Security</h2>
+            <p>All data is stored in secure PostgreSQL databases with encryption at rest. We use industry-standard security practices including bcrypt password hashing, session-based authentication with automatic timeout, and HTTPS encryption for all data in transit. Your data is logically isolated from other customers in our multi-tenant architecture.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">5. Data Security</h2>
-            <p>We implement industry-standard security measures including encrypted connections (HTTPS), secure password hashing (bcrypt), session-based authentication with automatic timeout, and tenant isolation ensuring customers cannot access each other's data. While no system is 100% secure, we take reasonable precautions to protect your information.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">5. Third-Party Services</h2>
+            <p>We use the following third-party services to operate AutoReplyChat:</p>
+            <p className="mt-2"><strong className="text-slate-100">Anthropic (Claude AI):</strong> To generate chatbot responses based on your training content.</p>
+            <p className="mt-2"><strong className="text-slate-100">Resend:</strong> To deliver lead capture email notifications.</p>
+            <p className="mt-2"><strong className="text-slate-100">Railway:</strong> For secure application hosting.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">6. Data Retention</h2>
-            <p>Your account data, training content, and chat logs are retained for as long as your account is active. Upon account deletion, all associated data including training content, embeddings, chat history, and lead information will be permanently removed within 30 days.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">6. Data Retention</h2>
+            <p>We retain your data for as long as your account is active. If you cancel your account, we will delete your data within 30 days of cancellation. You may request deletion of your data at any time by contacting us.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">7. Your Rights</h2>
-            <p>You have the right to access, correct, or delete your personal data at any time. You can export your lead data from the dashboard. To request full account deletion or data export, contact us at mick@autoreplychat.com.</p>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">7. Your Rights</h2>
+            <p>You have the right to access, correct, or delete your personal data. You may export your data or request its deletion by contacting us at mick@autoreplychat.com.</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">8. Cookies</h2>
-            <p>We use a single session cookie (sessionId) to maintain your login state. This is essential for the service to function and expires after 15 minutes of inactivity. We do not use tracking cookies or third-party advertising cookies.</p>
-          </section>
-
-          <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">9. Changes to This Policy</h2>
-            <p>We may update this privacy policy from time to time. We will notify registered users of any material changes via email.</p>
-          </section>
-
-          <section>
-            <h2 className="font-display text-2xl font-bold text-slate-100 mb-4">10. Contact</h2>
+            <h2 className="font-display text-2xl font-bold text-slate-100 mb-3">8. Contact</h2>
             <p>If you have questions about this privacy policy, contact us at:</p>
-            <p className="mt-2">Email: <a href="mailto:mick@autoreplychat.com" className="text-amber-500 hover:text-amber-400">mick@autoreplychat.com</a></p>
-            <p>Phone: <a href="tel:+447501439406" className="text-amber-500 hover:text-amber-400">07501 439406</a></p>
+            <p className="mt-2">Email: <a href="mailto:mick@autoreplychat.com" className="text-amber-500 hover:underline">mick@autoreplychat.com</a></p>
+            <p>Phone: <a href="tel:07501439406" className="text-amber-500 hover:underline">07501 439406</a></p>
           </section>
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="border-t border-slate-800/50 py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -106,7 +86,7 @@ export default function Privacy() {
               <span className="text-slate-100">ReplyChat</span>
             </a>
             <div className="flex gap-8 text-sm text-slate-400">
-              <a href="/privacy" className="text-amber-500">Privacy</a>
+              <a href="/privacy" className="hover:text-amber-500 transition-colors">Privacy</a>
               <a href="/terms" className="hover:text-amber-500 transition-colors">Terms</a>
             </div>
             <div className="text-sm text-slate-500">
