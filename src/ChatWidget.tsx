@@ -15,6 +15,7 @@ interface ChatWidgetProps {
   headerTitle?: string;
   headerColor?: string;
   textColor?: string;
+  leadCaptureEnabled?: boolean;
 }
 
 const API_URL = 'https://api.autoreplychat.com/api';
@@ -26,7 +27,8 @@ export default function ChatWidget({
   embedded = false,
   headerTitle = "Support Assistant",
   headerColor = "#3b82f6",
-  textColor = "#ffffff"
+  textColor = "#ffffff",
+  leadCaptureEnabled = true
 }: ChatWidgetProps) {
   const { t } = useTranslation();
   
@@ -99,7 +101,7 @@ export default function ChatWidget({
       };
       setMessages(prev => [...prev, botMessage]);
       
-      if (messages.length === 0 && !leadCaptured) {
+      if (messages.length === 0 && !leadCaptured && leadCaptureEnabled) {
         setTimeout(() => setShowLeadForm(true), 1000);
       }
     } catch (error) {
