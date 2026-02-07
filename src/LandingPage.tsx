@@ -5,6 +5,16 @@ export default function LandingPage() {
 
   useEffect(() => {
     setIsVisible(true);
+
+    const script = document.createElement('script');
+    script.src = 'https://autoreplychat.com/embed.js';
+    script.defer = true;
+    script.dataset.botId = '7090162816048314af2455bf';
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
   return (
@@ -415,17 +425,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {/* Widget Script - Load your actual widget here */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            // Add your AutoReplyChat widget embed code here
-            // For demo purposes, you'd load it from your domain
-            // Example: (function(){var s=document.createElement('script');s.src='https://autoreplychat.com/widget.js';s.dataset.customer='demo';document.body.appendChild(s);})();
-          `
-        }}
-      />
     </div>
   );
 }
