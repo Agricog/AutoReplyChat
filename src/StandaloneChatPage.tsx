@@ -9,6 +9,7 @@ interface BotSettings {
   headerTitle: string;
   headerColor: string;
   textColor: string;
+  leadCaptureEnabled: boolean;
 }
 
 function StandaloneChatPage() {
@@ -81,6 +82,7 @@ function StandaloneChatPage() {
           headerTitle={settings?.headerTitle}
           headerColor={settings?.headerColor}
           textColor={settings?.textColor}
+          leadCaptureEnabled={settings?.leadCaptureEnabled}
         />
       </div>
     </div>
