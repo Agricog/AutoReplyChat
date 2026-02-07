@@ -1,5 +1,4 @@
 (function() {
-  // Get bot ID from script tag - find by src attribute for defer compatibility
   var currentScript = document.currentScript || document.querySelector('script[src*="embed.js"]');
   var botId = currentScript ? currentScript.getAttribute('data-bot-id') : null;
   
@@ -8,7 +7,6 @@
     return;
   }
   
-  // Fetch bot settings
   fetch('https://api.autoreplychat.com/api/bots/' + botId + '/settings')
     .then(function(response) { return response.json(); })
     .then(function(settings) {
@@ -16,7 +14,6 @@
     })
     .catch(function(error) {
       console.error('AutoReplyChat: Failed to load bot settings', error);
-      // Use defaults if settings fail
       createWidget(botId, {});
     });
   
@@ -26,6 +23,13 @@
     var buttonSize = settings.buttonSize || 60;
     var chatBubbleBg = settings.chatBubbleBg || '#3b82f6';
     var barMessage = settings.barMessage || 'Chat Now';
+    
+    // Inject responsive styles
+    var style = document.createElement('style');
+    style.textContent = '#autoreply-chat-iframe-container{display:none;width:380px;height:550px;margin-bottom:16px;}' +
+      '@media(max-width:500px){#autoreply-chat-iframe-container{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;margin:0!important;z-index:10000!important;border-radius:0!important;}' +
+      '#autoreply-chat-iframe-container iframe{border-radius:0!important;}}';
+    document.head.appendChild(style);
     
     // Create container
     var container = document.createElement('div');
@@ -40,7 +44,7 @@
       button.style.cssText = 'background: ' + chatBubbleBg + '; color: white; padding: 12px 20px; border-radius: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; transition: transform 0.2s, opacity 0.2s;';
       button.innerHTML = '<svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span style="font-weight: 500;">' + barMessage + '</span>';
     } else {
-      button.style.cssText = 'background: ' + chatBubbleBg + '; width: ' + buttonSize + 'px; height: ' + buttonSize + 'px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, opacity 0.2s;';
+      button.style.cssText = 'background: ' + chatBubbleBg + '; width: ' + buttonSize + 'px; height: ' + buttonSize + 'px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, opacity 0.2s; position: relative; z-index: 10001;';
       var iconSize = Math.round(buttonSize * 0.4);
       button.innerHTML = '<svg width="' + iconSize + '" height="' + iconSize + '" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>';
     }
@@ -48,18 +52,14 @@
     button.onmouseover = function() { this.style.transform = 'scale(1.05)'; };
     button.onmouseout = function() { this.style.transform = 'scale(1)'; };
     
-    // Create iframe container (hidden initially)
+    // Create iframe container
     var iframeContainer = document.createElement('div');
     iframeContainer.id = 'autoreply-chat-iframe-container';
-    var isMobile = window.innerWidth <= 500;
-    iframeContainer.style.cssText = isMobile
-    ? 'display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10000; margin: 0;'
-    : 'display: none; width: 380px; height: 550px; margin-bottom: 16px;';
     
     // Create iframe
     var iframe = document.createElement('iframe');
     iframe.src = 'https://autoreplychat.com/chat/' + botId;
-    iframe.style.cssText = 'width: 100%; height: 100%; border: none; border-radius: ' + (isMobile ? '0' : '12px') + '; box-shadow: 0 4px 24px rgba(0,0,0,0.15);';
+    iframe.style.cssText = 'width: 100%; height: 100%; border: none; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.15);';
     iframe.allow = 'microphone';
     
     iframeContainer.appendChild(iframe);
