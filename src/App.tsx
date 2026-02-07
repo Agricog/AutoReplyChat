@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ChatWidget from './ChatWidget';
 import LandingPage from './LandingPage';
 import StandaloneChatPage from './StandaloneChatPage';
+import PrivacyPage from './PrivacyPage';
+import TermsPage from './TermsPage';
 
 function App() {
   return (
@@ -10,6 +12,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/demo" element={<DemoPage />} />
         <Route path="/login" element={<LoginRedirect />} />
+        <Route path="/signup" element={<SignupRedirect />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/chat/:botId" element={<StandaloneChatPage />} />
       </Routes>
     </BrowserRouter>
@@ -18,6 +23,11 @@ function App() {
 
 function LoginRedirect() {
   window.location.href = 'https://api.autoreplychat.com/login';
+  return null;
+}
+
+function SignupRedirect() {
+  window.location.href = 'https://api.autoreplychat.com/signup';
   return null;
 }
 
