@@ -22,13 +22,23 @@
     var buttonPosition = settings.buttonPosition || 'right';
     var buttonSize = settings.buttonSize || 60;
     var chatBubbleBg = settings.chatBubbleBg || '#3b82f6';
+    var headerColor = settings.headerColor || '#3b82f6';
+    var textColor = settings.textColor || '#ffffff';
     var barMessage = settings.barMessage || 'Chat Now';
+    
+    function isMobile() {
+      return window.innerWidth <= 500;
+    }
     
     // Inject responsive styles
     var style = document.createElement('style');
     style.textContent = '#autoreply-chat-iframe-container{display:none;width:380px;height:550px;margin-bottom:16px;}' +
-      '@media(max-width:500px){#autoreply-chat-iframe-container{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;margin:0!important;z-index:10000!important;border-radius:0!important;}' +
-      '#autoreply-chat-iframe-container iframe{border-radius:0!important;}}';
+      '#autoreply-chat-close-btn{display:none;}' +
+      '@media(max-width:500px){' +
+        '#autoreply-chat-iframe-container{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;margin:0!important;z-index:10000!important;border-radius:0!important;}' +
+        '#autoreply-chat-iframe-container iframe{border-radius:0!important;}' +
+        '#autoreply-chat-close-btn.is-open{display:flex!important;position:fixed!important;top:10px!important;right:10px!important;z-index:10002!important;width:44px!important;height:44px!important;align-items:center!important;justify-content:center!important;border-radius:50%!important;border:none!important;cursor:pointer!important;box-shadow:0 2px 8px rgba(0,0,0,0.2)!important;}' +
+      '}';
     document.head.appendChild(style);
     
     // Create container
@@ -52,6 +62,13 @@
     button.onmouseover = function() { this.style.transform = 'scale(1.05)'; };
     button.onmouseout = function() { this.style.transform = 'scale(1)'; };
     
+    // Create mobile close button (sits outside iframe, on top of it)
+    var closeBtn = document.createElement('button');
+    closeBtn.id = 'autoreply-chat-close-btn';
+    closeBtn.setAttribute('aria-label', 'Close chat');
+    closeBtn.style.backgroundColor = headerColor;
+    closeBtn.innerHTML = '<svg width="24" height="24" fill="' + textColor + '" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+    
     // Create iframe container
     var iframeContainer = document.createElement('div');
     iframeContainer.id = 'autoreply-chat-iframe-container';
@@ -64,29 +81,52 @@
     
     iframeContainer.appendChild(iframe);
     
-    // Toggle function
-    var isOpen = false;
-    button.onclick = function() {
-      isOpen = !isOpen;
-      if (isOpen) {
-        iframeContainer.style.display = 'block';
+    // Close chat function
+    function closeChat() {
+      isOpen = false;
+      iframeContainer.style.display = 'none';
+      closeBtn.classList.remove('is-open');
+      button.style.display = 'flex';
+      if (buttonStyle === 'bar') {
+        button.innerHTML = '<svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span style="font-weight: 500;">' + barMessage + '</span>';
+      } else {
+        button.innerHTML = '<svg width="' + iconSize + '" height="' + iconSize + '" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>';
+      }
+    }
+    
+    // Open chat function
+    function openChat() {
+      isOpen = true;
+      iframeContainer.style.display = 'block';
+      if (isMobile()) {
+        closeBtn.classList.add('is-open');
+        button.style.display = 'none';
+      } else {
         if (buttonStyle === 'bar') {
           button.innerHTML = '<svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg><span style="font-weight: 500;">Close</span>';
         } else {
           button.innerHTML = '<svg width="' + iconSize + '" height="' + iconSize + '" fill="white" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
         }
-      } else {
-        iframeContainer.style.display = 'none';
-        if (buttonStyle === 'bar') {
-          button.innerHTML = '<svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span style="font-weight: 500;">' + barMessage + '</span>';
-        } else {
-          button.innerHTML = '<svg width="' + iconSize + '" height="' + iconSize + '" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>';
-        }
       }
+    }
+    
+    // Toggle function
+    var isOpen = false;
+    button.onclick = function() {
+      if (isOpen) {
+        closeChat();
+      } else {
+        openChat();
+      }
+    };
+    
+    closeBtn.onclick = function() {
+      closeChat();
     };
     
     container.appendChild(iframeContainer);
     container.appendChild(button);
     document.body.appendChild(container);
+    document.body.appendChild(closeBtn);
   }
 })();
