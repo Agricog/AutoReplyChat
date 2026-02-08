@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'https://api.autoreplychat.com';
+const API_BASE = 'https://api.autoreplychat.com';
 
 class ApiClient {
   private getToken(): string | null {
