@@ -284,7 +284,6 @@ export default function ChatWidget({
       >
         <div>
           <h3 className="font-semibold">{headerTitle}</h3>
-          <p className="text-xs" style={{ opacity: 0.8 }}>{t('headerSubtitle')}</p>
         </div>
         {!embedded && (
           <button 
