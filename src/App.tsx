@@ -4,6 +4,10 @@ import LandingPage from './LandingPage';
 import StandaloneChatPage from './StandaloneChatPage';
 import PrivacyPage from './PrivacyPage';
 import TermsPage from './TermsPage';
+import { Navigate } from 'react-router-dom';
+
+// In your routes:
+<Route path="*" element={<Navigate to="/" replace />} />
 
 function App() {
   return (
@@ -16,6 +20,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/chat/:botId" element={<StandaloneChatPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
