@@ -58,7 +58,6 @@ class ApiClient {
     return data;
   }
 
-  // File upload - sends FormData (no Content-Type header, browser sets boundary)
   async upload(endpoint: string, formData: FormData) {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
