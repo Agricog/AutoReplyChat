@@ -254,15 +254,15 @@ export default function ChatWidget({
           <p className="text-xs" style={{ opacity: 0.8 }}>{t('headerSubtitle')}</p>
         </div>
         {!embedded && (
-          <button 
-            onClick={() => setIsOpen(false)}
-            style={{ color: textColor }}
-            className="hover:opacity-70 rounded p-1"
-            aria-label={t('closeButton')}
-          >
-            <X size={20} />
-          </button>
-        )}
+  <button 
+    onClick={() => setIsOpen(false)}
+    style={{ color: textColor }}
+    className="hover:opacity-70 rounded p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+    aria-label={t('closeButton')}
+  >
+    <X size={24} />
+  </button>
+)}
       </div>
 
       {/* Messages Area */}
