@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaschem.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://autoreplychat.com/</loc>
+    <lastmod>2026-02-08</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://autoreplychat.com/privacy</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://autoreplychat.com/terms</loc>
+    <priority>0.3</priority>
+  </url>
+</urlset>
+```
+
+Also add a `public/robots.txt`:
+```
+User-agent: *
+Allow: /
+Sitemap: https://autoreplychat.com/sitemap.xml
