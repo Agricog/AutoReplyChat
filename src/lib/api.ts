@@ -18,6 +18,15 @@ class ApiClient {
     return headers;
   }
 
+  private getAuthHeader(): HeadersInit {
+    const headers: HeadersInit = {};
+    const token = this.getToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+  }
+
   async post(endpoint: string, body: Record<string, unknown>, includeAuth = true) {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
@@ -46,6 +55,18 @@ class ApiClient {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Request failed');
+    return data;
+  }
+
+  // File upload - sends FormData (no Content-Type header, browser sets boundary)
+  async upload(endpoint: string, formData: FormData) {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      headers: this.getAuthHeader(),
+      body: formData,
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
     return data;
   }
 }
