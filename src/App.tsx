@@ -1,39 +1,32 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ChatWidget from './ChatWidget';
 import LandingPage from './LandingPage';
-import StandaloneChatPage from './StandaloneChatPage';
-import PrivacyPage from './PrivacyPage';
-import TermsPage from './TermsPage';
-import { Navigate } from 'react-router-dom';
-
-// In your routes:
-<Route path="*" element={<Navigate to="/" replace />} />
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/demo" element={<DemoPage />} />
-        <Route path="/login" element={<LoginRedirect />} />
-        <Route path="/signup" element={<SignupRedirect />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/chat/:botId" element={<StandaloneChatPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } />
+          {/* Catch-all redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
-}
-
-function LoginRedirect() {
-  window.location.href = 'https://api.autoreplychat.com/login';
-  return null;
-}
-
-function SignupRedirect() {
-  window.location.href = 'https://api.autoreplychat.com/signup';
-  return null;
 }
 
 function DemoPage() {
