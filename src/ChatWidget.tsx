@@ -240,7 +240,7 @@ export default function ChatWidget({
   // Chat window (embedded or floating open)
   const containerClass = embedded
     ? "w-full h-[550px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200"
-    : "fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200 z-50";
+    : "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 w-full sm:w-96 h-full sm:h-[600px] bg-white sm:rounded-lg shadow-2xl flex flex-col overflow-hidden sm:border border-gray-200 z-50";
 
   return (
     <div className={containerClass}>
