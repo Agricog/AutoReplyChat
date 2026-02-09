@@ -175,5 +175,12 @@
     container.appendChild(button);
     document.body.appendChild(container);
     document.body.appendChild(closeBtn);
+
+    // Expose public API for programmatic control
+    window.AutoReplyChat = {
+      open: openChat,
+      close: closeChat,
+      toggle: function() { isOpen ? closeChat() : openChat(); }
+    };
   }
 })();
