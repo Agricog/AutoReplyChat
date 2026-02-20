@@ -777,7 +777,7 @@ export default function LandingPage() {
                 <span className="text-slate-100">ReplyChat</span>
               </div>
               <div className="text-sm text-slate-400 space-y-1">
-                <p>Fully managed AI chatbots by{' '}
+                <p>Fully managed AI chatbots built by{' '}
                   <a href="https://autaimate.com" target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-amber-500 transition-colors">
                     Autaimate
                   </a>
