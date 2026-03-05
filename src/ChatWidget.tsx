@@ -270,7 +270,7 @@ export default function ChatWidget({
 
   // Chat window styles - fullscreen on mobile, floating card on desktop
   const containerStyle: React.CSSProperties = embedded
-    ? {}
+    ? { width: '100%', height: '100%' }
     : isMobile
     ? {
         position: 'fixed',
@@ -294,7 +294,7 @@ export default function ChatWidget({
       };
 
   const containerClass = embedded
-    ? "w-full h-[550px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200"
+    ? "w-full h-full bg-white flex flex-col overflow-hidden"
     : "bg-white shadow-2xl flex flex-col overflow-hidden";
 
   return (
