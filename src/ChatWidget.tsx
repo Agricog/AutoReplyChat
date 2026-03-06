@@ -268,9 +268,15 @@ export default function ChatWidget({
     );
   }
 
-  // Chat window styles - fullscreen on mobile, floating card on desktop
+  // Chat window styles
   const containerStyle: React.CSSProperties = embedded
-    ? { width: '100%', height: '100%' }
+    ? {
+        // Use 100vh so it fills the iframe without needing parent height chain
+        width: '100%',
+        height: '100vh',
+        maxHeight: '100vh',
+        overflow: 'hidden',
+      }
     : isMobile
     ? {
         position: 'fixed',
@@ -294,14 +300,14 @@ export default function ChatWidget({
       };
 
   const containerClass = embedded
-    ? "w-full h-full bg-white flex flex-col overflow-hidden"
+    ? "bg-white flex flex-col overflow-hidden"
     : "bg-white shadow-2xl flex flex-col overflow-hidden";
 
   return (
     <div className={containerClass} style={containerStyle}>
       {/* Header */}
       <div 
-        style={{ backgroundColor: headerColor, color: textColor }} 
+        style={{ backgroundColor: headerColor, color: textColor, flexShrink: 0 }} 
         className="p-4 flex items-center justify-between"
       >
         <div>
@@ -328,13 +334,13 @@ export default function ChatWidget({
 
       {/* Trial Badge */}
       {isTrial && (
-        <div style={{ backgroundColor: '#fef3c7', borderBottom: '1px solid #fde68a', padding: '6px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+        <div style={{ backgroundColor: '#fef3c7', borderBottom: '1px solid #fde68a', padding: '6px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', flexShrink: 0 }}>
           <span style={{ fontSize: '12px', color: '#92400e', fontWeight: 500 }}>⚡ Trial Version</span>
         </div>
       )}
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: chatWindowBg }}>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: chatWindowBg, minHeight: 0 }}>
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
             <MessageCircle size={48} className="mx-auto mb-3 text-gray-300" />
@@ -389,7 +395,7 @@ export default function ChatWidget({
 
       {/* Lead Form */}
       {showLeadForm && !leadCaptured && (
-        <div className="bg-blue-50 border-t border-blue-200 p-4 space-y-3">
+        <div className="bg-blue-50 border-t border-blue-200 p-4 space-y-3" style={{ flexShrink: 0 }}>
           <div className="flex items-start justify-between">
             <div>
               <p className="font-medium text-blue-900 text-sm">{leadFormMessage}</p>
@@ -433,7 +439,7 @@ export default function ChatWidget({
       )}
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-200 bg-white">
+      <div className="p-4 border-t border-gray-200 bg-white" style={{ flexShrink: 0 }}>
         <div className="flex gap-2">
           <input
             type="text"
